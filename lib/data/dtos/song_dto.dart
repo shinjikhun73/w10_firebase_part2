@@ -12,7 +12,6 @@ class SongDto {
     assert(json[durationKey] is int);
     assert(json[artistIdKey] is String);
     assert(json[imageUrlKey] is String);
-    assert(json[likesKey] is int);
 
     return Song(
       id: id,
@@ -20,12 +19,12 @@ class SongDto {
       artistId: json[artistIdKey],
       duration: Duration(milliseconds: json[durationKey]),
       imageUrl: Uri.parse(json[imageUrlKey]),
-      likes: json[likesKey],
+      likes: json[likesKey] ?? 0,
     );
   }
 
   /// Convert Song to JSON
-  Map<String, dynamic> toJson(Song song) {
+  static Map<String, dynamic> toJson(Song song) {
     return {
       titleKey: song.title,
       artistIdKey: song.artistId,

@@ -15,6 +15,19 @@ class Song {
     this.likes = 0,
   });
 
+  Song copyWith({
+    int? likes,
+  }) {
+    return Song(
+      id: this.id,
+      title: this.title,
+      artistId: this.artistId,
+      duration: this.duration,
+      imageUrl: this.imageUrl,
+      likes: likes ?? this.likes,
+    );
+  }
+
   @override
   String toString() {
     return 'Song(id: $id, title: $title, artist id: $artistId, duration: $duration)';

@@ -45,10 +45,14 @@ class LibraryViewModel extends ChangeNotifier {
 
     try {
       // 1- Fetch songs
-      List<Song> songs = await songRepository.fetchSongs(forceFetch: forceFetch);
+      List<Song> songs = await songRepository.fetchSongs(
+        forceFetch: forceFetch,
+      );
 
       // 2- Fetch artists
-      List<Artist> artists = await artistRepository.fetchArtists(forceFetch: forceFetch);
+      List<Artist> artists = await artistRepository.fetchArtists(
+        forceFetch: forceFetch,
+      );
 
       // 3- Create the mapping artistid-> artist
       Map<String, Artist> mapArtist = {};
@@ -64,12 +68,40 @@ class LibraryViewModel extends ChangeNotifier {
           .toList();
 
       this.data = AsyncValue.success(data);
-
     } catch (e) {
       // 3- Fetch is unsucessfull
       data = AsyncValue.error(e);
     }
     notifyListeners();
+  }
+
+  Future<void> likeSong(LibraryItemData item) async {
+    // make sure we have data
+    if (data.state != AsyncValueState.success || data.data == null) return;
+
+    final currentList = data.data!;
+    final index = currentList.indexOf(item);
+    if (index == -1) return;
+
+    // save old item incase we revert
+    final oldItem = currentList[index];
+
+    // update like
+    final newSong = item.song.copyWith(likes: item.song.likes + 1);
+    final newItem = item.copyWith(song: newSong);
+
+    currentList[index] = newItem;
+    notifyListeners();
+
+    // send request
+    try {
+      await songRepository.likeSong(newSong.id, newSong.likes);
+    } catch (e) {
+      //if error revert locally
+      currentList[index] = oldItem;
+      notifyListeners();
+      throw Exception('updating like failed');
+    }
   }
 
   bool isSongPlaying(Song song) => playerState.currentSong == song;

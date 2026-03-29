@@ -14,6 +14,9 @@ class SongRepositoryMock implements SongRepository {
   }
 
   @override
+  Future<void> likeSong(String songId, int newLikes) async {}
+
+  @override
   Future<Song?> fetchSongById(String id) async {
     return Future.delayed(Duration(seconds: 4), () {
       return _songs.firstWhere(

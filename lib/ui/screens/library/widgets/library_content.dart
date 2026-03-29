@@ -45,6 +45,26 @@ class LibraryContent extends StatelessWidget {
               onTap: () {
                 mv.start(data[index].song);
               },
+              onLike: () async {
+                try {
+                  await mv.likeSong(data[index]);
+                } catch (e) {
+                  // Show Error Dialog if network request fails
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Error'),
+                      content: Text('updating like failed'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
             ),
           ),
         );
