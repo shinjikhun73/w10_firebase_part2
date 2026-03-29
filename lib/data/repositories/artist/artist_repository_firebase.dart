@@ -15,9 +15,9 @@ class ArtistRepositoryFirebase implements ArtistRepository {
   List<Artist>? _cachedArtists;
 
   @override
-  Future<List<Artist>> fetchArtists() async {
+  Future<List<Artist>> fetchArtists({bool forceFetch = false}) async {
     // return cachhe if available
-    if (_cachedArtists != null) {
+    if (!forceFetch && _cachedArtists != null) {
       return _cachedArtists!;
     }
 
