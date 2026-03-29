@@ -6,6 +6,7 @@ import '../../../theme/theme.dart';
 import '../../../utils/async_value.dart';
 import '../../../widgets/song/artist_tile.dart';
 import '../view_model/artists_view_model.dart';
+import '../artist_details_screen.dart';
 
 class ArtistsContent extends StatelessWidget {
   const ArtistsContent({super.key});
@@ -29,12 +30,23 @@ class ArtistsContent extends StatelessWidget {
             style: TextStyle(color: Colors.red),
           ),
         );
-
+        break;
       case AsyncValueState.success:
         List<Artist> artists = asyncValue.data!;
         content = ListView.builder(
           itemCount: artists.length,
-          itemBuilder: (context, index) => ArtistTile(artist: artists[index]),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ArtistDetailsScreen(artist: artists[index]),
+                  ),
+                );
+              },
+              child: ArtistTile(artist: artists[index]),
+            );
+          },
         );
     }
 

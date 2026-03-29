@@ -1,4 +1,6 @@
 import '../../../model/artist/artist.dart';
+import '../../../model/songs/song.dart';
+import '../../../model/artist/comment.dart';
 import 'artist_repository.dart';
 
 class ArtistRepositoryMock implements ArtistRepository {
@@ -7,7 +9,7 @@ class ArtistRepositoryMock implements ArtistRepository {
   @override
   Future<List<Artist>> fetchArtists({bool forceFetch = false}) async {
     return Future.delayed(Duration(seconds: 4), () {
-      throw _artists;
+      return _artists;
     });
   }
 
